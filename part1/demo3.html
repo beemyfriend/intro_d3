@@ -24,6 +24,7 @@
     .append('g')
     .attr('id', 'myCircles')
 
+
 ////////////////////
 /// Semi Manual
 ////////////////////
@@ -101,6 +102,19 @@
     })
     .append('title')
     .html(d => d)
+
+  line = d3.line()
+    .x(d => scaleX(d))
+    .y(d => scaleY(d))
+
+  myCircles
+    .append('path')
+    .datum(myData)
+    .attr('fill', 'none')
+    .attr('stroke', 'black')
+    .attr('stroke-width', 5)
+    .attr('d', line)
+    .lower()
 
 
 //////////////////////////
