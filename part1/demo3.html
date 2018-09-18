@@ -1,0 +1,185 @@
+<html>
+<head>
+  <meta charset='utf-8' />
+  <style>
+
+  </style>
+</head>
+
+<body style='padding: 0; margin: 0;'>
+  <svg style='width: 100%; height: 100%; background-color: lightgrey'>
+  </svg>
+</body>
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
+
+<script>
+///////////////////
+/// Setup
+///////////////////
+
+  myData = [0, 100, 200, 300];
+
+  myCircles = d3.select('svg')
+    .append('g')
+    .attr('id', 'myCircles')
+
+////////////////////
+/// Semi Manual
+////////////////////
+
+  // myCircles
+  //   .append('circle')
+  //   .attr('cx', myData[0])
+  //   .attr('cy', myData[0])
+  //   .attr('r', 20);
+  //
+  //
+  // myCircles
+  //   .append('circle')
+  //   .attr('cx', myData[1])
+  //   .attr('cy', myData[1])
+  //   .attr('r', 20);
+  //
+  // myCircles
+  //   .append('circle')
+  //   .attr('cx', myData[2])
+  //   .attr('cy', myData[2])
+  //   .attr('r', 20);
+  //
+  // myCircles
+  //   .append('circle')
+  //   .attr('cx', myData[3])
+  //   .attr('cy', myData[3])
+  //   .attr('r', 20)
+
+
+//////////////////////
+// Mapping the data
+/////////////////////
+
+  // myCircles
+  //   .selectAll('circle')
+  //   .data(myData)
+  //   .enter().append('circle')
+  //   .attr('cx', d => d)
+  //   .attr('cy', d => d)
+  //   .attr('r', 20)
+  //   .attr('id', (d,i) => `index_${i}`)
+
+
+
+///////////////////////////
+/// Scaling data to screen dimensions
+//////////////////////////
+
+  scaleX = d3.scaleLinear()
+    .domain([0, 300])
+    .range([20, 420])
+
+  scaleY = d3.scaleLinear()
+    .domain([0, 300])
+    .range([420, 20])
+
+  myCircles
+    .selectAll('circle')
+    .data(myData)
+    .enter().append('circle')
+    .attr('cx', d => scaleX(d))
+    .attr('cy', d => scaleY(d))
+    .attr('r', 20)
+    .attr('class', d => `shape_${d}`)
+    .style('fill','blue')
+    .style('stroke','black')
+    .on('mouseover', (d)=>{
+      d3.selectAll(`.shape_${d}`)
+        .style('fill', 'gold')
+    })
+    .on('mouseout', (d)=>{
+      d3.selectAll(`.shape_${d}`)
+        .style('fill', 'blue')
+    })
+    .append('title')
+    .html(d => d)
+
+
+//////////////////////////
+/// Rectangles and scaleBand
+//////////////////////////
+
+  scaleXBar = d3.scaleBand()
+    .domain(myData.map((x,i) => i))
+    .range([20, 420])
+
+  myRects = d3.select('svg')
+    .append('g')
+    .attr('id', 'myRects');
+
+  myRects
+    .selectAll('rects')
+    .data(myData)
+    .enter().append('rect')
+    .attr('x', (d,i) => scaleXBar(i))
+    .attr('y', d => scaleY(d))
+    .attr('width', scaleXBar.bandwidth())
+    .attr('height', d => 420 - scaleY(d))
+    .attr('class', d => `shape_${d}`)
+    .style('fill','blue')
+    .style('stroke','black')
+    .on('mouseover', (d)=>{
+      d3.selectAll(`.shape_${d}`)
+        .style('fill', 'gold')
+    })
+    .on('mouseout', (d)=>{
+      d3.selectAll(`.shape_${d}`)
+        .style('fill', 'blue')
+    })
+    .append('title')
+    .html(d => d)
+
+
+///////////////////////
+/// orgnize plots and make it dynamic
+///////////////////////
+
+  myRects
+    .attr('transform', 'scale(.75) translate(430, 100)')
+
+  myCircles
+    .attr('transform', 'scale(.75) translate(10, 100)')
+
+
+/////////////////
+// Axis and title
+/////////////////
+
+  xAxis = d3.axisBottom(scaleX)
+
+  myCircles
+    .append('g')
+    .attr('transform', 'translate(0, 420)')
+    .call(xAxis)
+
+  xBarAxis = d3.axisBottom(scaleXBar)
+  yAxis = d3.axisRight(scaleY)
+
+  myRects
+    .append('g')
+    .attr('transform', 'translate(0, 420)')
+    .call(xBarAxis)
+
+  myRects
+    .append('g')
+    .attr('transform', 'translate(420, 0)')
+    .call(yAxis)
+
+  title = d3.select('svg')
+    .append('text')
+    .attr('x', 330)
+    .attr('y', 50)
+    .attr('text-anchor', 'middle')
+    .style('font', '50px sarif')
+    .text('My D3.js Interactive')
+
+</script>
+</html>
