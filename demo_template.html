@@ -1,12 +1,13 @@
+
 <html>
 <head>
   <meta charset='utf-8' />
   <style>
-  
+
   </style>
 </head>
 
-<body style='padding: 0; margin: 0;'>
+<body style=' padding: 0; margin: 0;'>
   <svg style='width: 100%; height: 100%; background-color: lightgrey'>
   </svg>
 </body>
@@ -14,6 +15,36 @@
 <script src="https://d3js.org/d3.v5.min.js"></script>
 
 <script>
+
+data = [0, 100, 200, 300]
+
+xScale = d3.scaleLinear()
+  .domain([0, 300])
+  .range([100, 600])
+
+yScale = d3.scaleLinear()
+  .domain([0, 300])
+  .range([600, 100])
+
+// d3.select('svg')
+//   .append('g')
+//   .selectAll('circles')
+//   .data(data)
+//   .enter().append('circle')
+//   .attr('cx', d => xScale(d))
+//   .attr('cy', d => yScale(d))
+//   .attr('r', 50)
+
+d3.select('svg')
+  .append('g')
+  .selectAll('rect')
+  .data(data)
+  .enter().append('rect')
+  .attr('x', d => d)
+  .attr('y', d => yScale(0) - d)
+  .attr('width', 100)
+  .attr('height', d => d)
+
 
 </script>
 </html>
